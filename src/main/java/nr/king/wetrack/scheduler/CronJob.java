@@ -40,7 +40,7 @@ public class CronJob extends QuartzJobBean {
         Long userId = mergedJobDataMap.getLong("userId");
         String task = mergedJobDataMap.getString("task");
         logger.info("************* Scheduler Execution for - " + userId + "_" + task + " started! *************");
-        try {
+      /*  try {
             if (!akkaMasterRepo.findByUserIdAndStatusAndTask(userId, "inprogress", task).isPresent()) {
                 logger.info(String.format("************* Akka queue Execution for userId -> %s and task -> %s started! *************", userId, task));
                 akkaMasterRepo.akkaAudit(userId, "inprogress", task, "GoDeliver", "Akka Queue Started successfully.!");
@@ -56,7 +56,7 @@ public class CronJob extends QuartzJobBean {
         } catch (Exception e) {
             akkaMasterRepo.akkaAudit(userId, "completed", task, "GoDeliver", String.format("Akka Queue execution failed for userId -> %s and task -> %s due to - %s", userId, task, e.getMessage()));
             logger.error(String.format("[Akka] [pos data sync] Exception while executing the akka queue due to - %s", e.getMessage()), e);
-        }
+        }*/
         logger.info("************* Scheduler Execution for - " + userId + "_" + task + " ended! *************");
     }
 }

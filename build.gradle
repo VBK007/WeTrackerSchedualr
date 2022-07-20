@@ -1,17 +1,25 @@
 plugins {
-	id 'org.springframework.boot' version '2.7.1'
+	id 'org.springframework.boot' version '2.7.0'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
-	id 'org.springframework.experimental.aot' version '0.12.1'
 }
 
-group = 'nr.king'
+group = 'com.example'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
 repositories {
-	maven { url 'https://repo.spring.io/release' }
 	mavenCentral()
+}
+
+configurations.all {
+	exclude module: "spring-boot-starter-logging"
 }
 
 dependencies {
@@ -36,13 +44,9 @@ dependencies {
 	implementation group: 'org.quartz-scheduler', name: 'quartz', version: '2.2.1'
 	implementation group: 'org.quartz-scheduler', name: 'quartz-jobs', version: '2.2.1'
 	implementation group: 'com.typesafe.akka', name: 'akka-actor_2.12', version: '2.5.19'
+
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
-}
-
-tasks.named('bootBuildImage') {
-	builder = 'paketobuildpacks/builder:tiny'
-	environment = ['BP_NATIVE_IMAGE': 'true']
 }

@@ -1,6 +1,7 @@
 package nr.king.wetrack.utils;
 
-import nr.king.familytracker.exceptions.FailedResponseException;
+
+import nr.king.wetrack.exceptions.FailedResponseException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

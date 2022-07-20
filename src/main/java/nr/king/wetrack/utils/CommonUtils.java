@@ -2,8 +2,8 @@ package nr.king.wetrack.utils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import nr.king.familytracker.jdbc.JdbcTemplateProvider;
-import nr.king.familytracker.model.http.homeModel.HomeModel;
+import nr.king.wetrack.http.homeModel.HomeModel;
+import nr.king.wetrack.jdbc.JdbcTemplateProvider;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -25,8 +25,7 @@ import java.time.format.ResolverStyle;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import static nr.king.familytracker.constant.LocationTrackingConstants.*;
+import static nr.king.wetrack.constant.LocationTrackingConstants.*;
 
 @Component
 public class CommonUtils {
@@ -201,14 +200,20 @@ public class CommonUtils {
         return new String(new Base64().encode(input.getBytes()));
     }
 
-    public Map<String, String> getHeadersMap(String authHeader) {
+    public Map<String, String> getHeadersMap() {
+        Map<String, String> headersMap = new LinkedHashMap<>();
+        headersMap.put("Content-Type", "application/json");
+        headersMap.put("Authorization","key=AAAALNZGB-o:APA91bFmdGOcQfkho_jJwkyVoUwU35kOzuh202WcFT63KR_m_oMY8DaBRZ4aNQZN0KTR0tCm8YXQU2lHQtKW1I6uthOabc5g_03eaAub0cIWyTZ1jNWpLk9K-IXUdvXy1xWF0B_CEoqQ");
+        return headersMap;
+    }
+
+    public Map<String, String> getHeadersMaps(String authHeader) {
         Map<String, String> headersMap = new LinkedHashMap<>();
         headersMap.put("Content-Type", "application/json");
         headersMap.put("X-Auth-Token", authHeader);
         headersMap.put("User", authHeader);
         return headersMap;
     }
-
 
 
     public String getExpiryTime(String purchaseMode)
@@ -375,7 +380,7 @@ public class CommonUtils {
         return skewCode == 520 || skewCode == 538 || skewCode == 260;
     }
 
-    public HomeModel getHomeModel(String token_header,boolean isFirstTime) {
+    public HomeModel getHomeModel(String token_header, boolean isFirstTime) {
         HomeModel homeModel = new HomeModel();
         String string = UUID.randomUUID().toString().substring(0,12).replace("-","f");
         Map<String, String[]> phoneBrandsMap = new HashMap<>();

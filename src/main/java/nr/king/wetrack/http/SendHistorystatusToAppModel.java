@@ -4,9 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import nr.king.familytracker.model.http.homeModel.GetPhoneNumberHistoryModel;
-
-import java.util.ArrayList;
 
 @Getter
 @Setter
@@ -15,6 +12,6 @@ import java.util.ArrayList;
 public class SendHistorystatusToAppModel {
     private Boolean status;
     private String message;
-    private ArrayList<GetPhoneNumberHistoryModel> statusList;
+   // private ArrayList<GetPhoneNumberHistoryModel> statusList;
 
 }

@@ -10,7 +10,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class NotificationModel {
-    boolean isEnable =false;
+    boolean enable =false;
     Long numberId;
     String userId;
+    String pushToken="";
 }

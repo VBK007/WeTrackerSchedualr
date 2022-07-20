@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import nr.king.familytracker.model.http.homeModel.HomeModel;
+import nr.king.wetrack.http.homeModel.HomeModel;
 
 @Getter
 @Setter

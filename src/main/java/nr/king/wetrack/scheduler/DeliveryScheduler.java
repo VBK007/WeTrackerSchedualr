@@ -1,15 +1,10 @@
 package nr.king.wetrack.scheduler;
 
-import com.gofrugal.delivery_data_sync_service.config.JdbcTemplateProvider;
-import com.gofrugal.delivery_data_sync_service.domain.SchedulerMaster;
-import com.gofrugal.delivery_data_sync_service.repo.SchedulerMasterRepo;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.quartz.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.annotation.PostConstruct;
 
 @Service
 public class DeliveryScheduler {
@@ -19,7 +14,7 @@ public class DeliveryScheduler {
     @Autowired
     private Scheduler scheduler;
 
-    @Autowired
+  /*  @Autowired
     private SchedulerMasterRepo schedulerMasterRepo;
 
     @Autowired
@@ -55,7 +50,7 @@ public class DeliveryScheduler {
 //            auditUtils.syncTracking(schedulerMaster.getUserId(), -1, 0, "failed", "unSchedule cron", String.format("Error due to - %s Exception stack Trace is - %s", e.getMessage(), e));
             logger.error("[Data Sync] Exception while unScheduling pos Data sync due to " + e.getMessage(), e);
         }
-    }
+    }*/
 
     private JobDetail buildJobDetail(String task, Long userId) {
         JobDataMap jobDataMap = new JobDataMap();
