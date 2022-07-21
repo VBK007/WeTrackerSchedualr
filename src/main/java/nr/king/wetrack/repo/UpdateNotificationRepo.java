@@ -10,6 +10,7 @@ import nr.king.wetrack.services.SchedularServices;
 import nr.king.wetrack.utils.CommonUtils;
 import nr.king.wetrack.utils.HttpUtils;
 import nr.king.wetrack.utils.ResponseUtils;
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,18 +64,24 @@ public class UpdateNotificationRepo {
     }
 
     private int insertNotify(NotificationModel notificationModel) {
-        return jdbcTemplate.getTemplate().update(INSERT_NUMBER_VALUE,
+        return jdbcTemplate.getTemplate().update(
+                INSERT_NUMBER_VALUE,
                 notificationModel.getUserId(),
                 notificationModel.getNumberId().toString(),
                 notificationModel.isEnable(),
-                notificationModel.getPushToken()
+                notificationModel.getPushToken(),
+                notificationModel.getHeaderToken(),
+                notificationModel.getNickName()
         );
     }
 
     private int updateNoty(NotificationModel notificationModel) {
-        return jdbcTemplate.getTemplate().update(UPDATE_PUSH_NOTIFICATION,
+        return jdbcTemplate.getTemplate().update(
+                UPDATE_PUSH_NOTIFICATION,
                 notificationModel.isEnable(),
                 notificationModel.getPushToken(),
+                notificationModel.getHeaderToken(),
+                notificationModel.getNickName(),
                 notificationModel.getUserId(),
                 notificationModel.getNumberId().toString()
         );
@@ -101,34 +108,52 @@ public class UpdateNotificationRepo {
                                 ))
                 );
                 GetPhoneHistoryMainArrayModel getPageHistoryNumberModel = commonUtils.safeParseJSON(objectMapper, httpResponse.getResponse(), GetPhoneHistoryMainArrayModel.class);
-               logger.info("Response data "+getPageHistoryNumberModel.getData().get(0));
-                if (getPageHistoryNumberModel != null && getPageHistoryNumberModel.getData()!=null && "available".equalsIgnoreCase(getPageHistoryNumberModel.getData().get(0).status)) {
-                    HttpResponse fcmReuest = httpUtils.doPostRequest(0,
-                            FCM_PUSH,
-                            commonUtils.getHeadersMap(),
-                            "Doing Push Notication",
-                            commonUtils.writeAsString(objectMapper, new FcmModelData(
-                                    sqlRowSet.getString("token"),
-                                    new Notification(
-                                            true,
-                                            "",
-                                            "WeTracker Status",
-                                            "2",
-                                            "Bharath is Online",
-                                            "high"
-                                            ),
-                                    new PushData(
-                                            true,
-                                            "Bharath is Online",
-                                            "app_sound.wav",
-                                            "FamilyTracker",
-                                            "high"
+                if (getPageHistoryNumberModel != null && getPageHistoryNumberModel.getData() != null && "available".equalsIgnoreCase(getPageHistoryNumberModel.getData().get(0).status)) {
 
-                                    )
-                            ))
-                    );
+                    logger.info("Response data  zero postion" + commonUtils.writeAsString(objectMapper, getPageHistoryNumberModel.getData().get(0)));
 
-                    logger.info("HttpReposne for fcmRequest"+commonUtils.writeAsString(objectMapper,fcmReuest.getResponse()));
+                    logger.info("Response data  first postion" + commonUtils.writeAsString(objectMapper, getPageHistoryNumberModel.getData().get(1)));
+
+
+                    if (sqlRowSet.getString("PREVIOUS_TIME").isEmpty() ||
+                            !getPageHistoryNumberModel.getData().get(0).getTimeStamp().equals(sqlRowSet.getString("PREVIOUS_TIME"))) {
+                        int updateLastUpdateTime = doUpdatePreviousTime(
+                                getPageHistoryNumberModel.getData().get(0).phoneNumber,
+                                getPageHistoryNumberModel.getData().get(0).timeStamp,
+                                sqlRowSet.getString("USER_ID")
+                        );
+                        logger.info("Updated the Prebvious time stamp for Number " +
+                                getPageHistoryNumberModel.getData().get(0).phoneNumber +
+                                "\n"
+                                + updateLastUpdateTime);
+
+                        HttpResponse fcmReuest = httpUtils.doPostRequest(0,
+                                FCM_PUSH,
+                                commonUtils.getHeadersMap(),
+                                "Doing Push Notication",
+                                commonUtils.writeAsString(objectMapper, new FcmModelData(
+                                        sqlRowSet.getString("HEADER_TOKEN"),
+                                        new Notification(
+                                                true,
+                                                "",
+                                                "WeTracker Status",
+                                                "2",
+                                                sqlRowSet.getString("NICK_NAME") + " is Online",
+                                                "high"
+                                        ),
+                                        new PushData(
+                                                true,
+                                                sqlRowSet.getString("NICK_NAME") + " is Online",
+                                                "app_sound.wav",
+                                                "FamilyTracker",
+                                                "high"
+
+                                        )
+                                ))
+                        );
+                        logger.info("Http Resposne for fcmRequest" + commonUtils.writeAsString(objectMapper, fcmReuest.getResponse()));
+
+                    }
 
                 }
             }
@@ -136,5 +161,13 @@ public class UpdateNotificationRepo {
         } catch (Exception exception) {
             logger.error("Exception in schedualr " + exception.getMessage(), exception);
         }
+    }
+
+    private int doUpdatePreviousTime(String phoneNumber, String timeStamp, String userId) {
+        return jdbcTemplate.getTemplate().update(UPDATE_PREVIOUS_TIME,
+                timeStamp,
+                userId,
+                phoneNumber
+        );
     }
 }

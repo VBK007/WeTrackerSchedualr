@@ -1,7 +1,7 @@
 package nr.king.wetrack.constant;
 
 public class QueryConstants {
-    public static final String selectNumberWithToken ="select USER_ID,NUMBER,ENABLE_NOTIFY,TOKEN,CREATED_AT,UPDATED_AT from " +
+    public static final String selectNumberWithToken ="select USER_ID,NUMBER,ENABLE_NOTIFY,TOKEN,HEADER_TOKEN,NICK_NAME,CREATED_AT,UPDATED_AT from " +
             "UPDATE_NOTIFCATION_NUMBER where ENABLE_NOTIFY=true";
 
 
@@ -43,14 +43,14 @@ public class QueryConstants {
     public static  final String GET_UPI_VALUES = "select UPI_ID,PURCHASE_TYPE,PURCHASE_DESCRIBITION,MONEY_IN_INR,MONEY_IN_USD,COLOR_CODE,COLOR_BAR,CREATED_AT,UPDATED_AT from UPI_DETAILS";
 
     public static  final  String UPDATE_PUSH_NOTIFICATION =
-            "update update_notifcation_number set ENABLE_NOTIFY=?, TOKEN =? where USER_ID=? and NUMBER=?";
+            "update update_notifcation_number set ENABLE_NOTIFY=?, TOKEN =?, HEADER_TOKEN=?, NICK_NAME=? where USER_ID=? and NUMBER=?";
 
-
+      public static  final String UPDATE_PREVIOUS_TIME = "update update_notifcation_number set PREVIOUS_TIME=? where USER_ID=? and NUMBER=?";
 
     public static  final  String INSERT_NUMBER_VALUE =
-            "insert into update_notifcation_number (USER_ID,NUMBER,ENABLE_NOTIFY,TOKEN,CREATED_AT,UPDATED_AT) " +
+            "insert into update_notifcation_number (USER_ID,NUMBER,ENABLE_NOTIFY,TOKEN,CREATED_AT,UPDATED_AT,HEADER_TOKEN,NICK_NAME,PREVIOUS_TIME) " +
                     "values " +
-                    "(?,?,?,?,current_timestamp,current_timestamp)";
+                    "(?,?,?,?,current_timestamp,current_timestamp,?,?,'')";
 
 
 }
