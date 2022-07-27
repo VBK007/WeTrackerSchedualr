@@ -35,7 +35,7 @@ public class SchedularServices {
         demoServiceMethod();
     }
 
-    @Scheduled(fixedDelay = 10000)
+    @Scheduled(initialDelay = 0, fixedDelay = 10000)
     public void demoServiceMethod() {
         try {
             updateNotificationRepo.doPushNotifcation();

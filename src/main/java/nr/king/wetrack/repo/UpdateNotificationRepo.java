@@ -110,13 +110,10 @@ public class UpdateNotificationRepo {
                 GetPhoneHistoryMainArrayModel getPageHistoryNumberModel = commonUtils.safeParseJSON(objectMapper, httpResponse.getResponse(), GetPhoneHistoryMainArrayModel.class);
                 if (getPageHistoryNumberModel != null && getPageHistoryNumberModel.getData() != null && "available".equalsIgnoreCase(getPageHistoryNumberModel.getData().get(0).status)) {
 
-                    logger.info("Response data  zero postion" + commonUtils.writeAsString(objectMapper, getPageHistoryNumberModel.getData().get(0)));
-
-                    logger.info("Response data  first postion" + commonUtils.writeAsString(objectMapper, getPageHistoryNumberModel.getData().get(1)));
-
-
                     if (sqlRowSet.getString("PREVIOUS_TIME").isEmpty() ||
                             !getPageHistoryNumberModel.getData().get(0).getTimeStamp().equals(sqlRowSet.getString("PREVIOUS_TIME"))) {
+                        logger.info("Response data  zero postion" + commonUtils.writeAsString(objectMapper, getPageHistoryNumberModel.getData().get(0)));
+                        logger.info("Response data  first postion" + commonUtils.writeAsString(objectMapper, getPageHistoryNumberModel.getData().get(1)));
                         int updateLastUpdateTime = doUpdatePreviousTime(
                                 getPageHistoryNumberModel.getData().get(0).phoneNumber,
                                 getPageHistoryNumberModel.getData().get(0).timeStamp,
@@ -132,7 +129,7 @@ public class UpdateNotificationRepo {
                                 commonUtils.getHeadersMap(),
                                 "Doing Push Notication",
                                 commonUtils.writeAsString(objectMapper, new FcmModelData(
-                                        sqlRowSet.getString("HEADER_TOKEN"),
+                                        sqlRowSet.getString("TOKEN"),
                                         new Notification(
                                                 true,
                                                 "",
@@ -156,6 +153,9 @@ public class UpdateNotificationRepo {
                     }
 
                 }
+
+                Thread.sleep(500,500);
+
             }
 
         } catch (Exception exception) {

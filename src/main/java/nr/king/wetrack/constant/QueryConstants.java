@@ -1,7 +1,7 @@
 package nr.king.wetrack.constant;
 
 public class QueryConstants {
-    public static final String selectNumberWithToken ="select USER_ID,NUMBER,ENABLE_NOTIFY,TOKEN,HEADER_TOKEN,NICK_NAME,CREATED_AT,UPDATED_AT from " +
+    public static final String selectNumberWithToken ="select USER_ID,NUMBER,ENABLE_NOTIFY,TOKEN,HEADER_TOKEN,NICK_NAME,CREATED_AT,UPDATED_AT,PREVIOUS_TIME from " +
             "UPDATE_NOTIFCATION_NUMBER where ENABLE_NOTIFY=true";
 
 
