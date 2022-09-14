@@ -21,4 +21,5 @@ public class HomeModel implements Serializable {
   private String id;
   private String version;
   private String ipAddress;
+  private String packageName;
 }

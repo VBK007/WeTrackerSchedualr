@@ -93,7 +93,6 @@ public class UpdateNotificationRepo {
         try {
 
             SqlRowSet sqlRowSet = jdbcTemplate.getTemplate().queryForRowSet(selectNumberWithToken);
-
             while (sqlRowSet.next()) {
                 HttpResponse httpResponse = httpUtils.doPostRequest(0,
                         GET_LAST_HISTORY,
