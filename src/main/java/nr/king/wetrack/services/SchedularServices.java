@@ -30,11 +30,11 @@ public class SchedularServices {
     private static final Logger logger = LogManager.getLogger(SchedularServices.class);
 
 
-    @PostConstruct
+  /*  @PostConstruct
     public void dotheMethod() {
         demoServiceMethod();
     }
-
+*/
     @Scheduled(initialDelay = 0, fixedDelay = 10000)
     public void demoServiceMethod() {
         try {
@@ -44,5 +44,15 @@ public class SchedularServices {
         }
     }
 
+
+
+    @Scheduled(cron = "00 00 * * *")
+    public void removeDemoUserNotification() {
+        try {
+            updateNotificationRepo.removeDemoUserNotification();
+        } catch (Exception exception) {
+            logger.error("Exception in schedualr " + exception.getMessage(), exception);
+        }
+    }
 
 }

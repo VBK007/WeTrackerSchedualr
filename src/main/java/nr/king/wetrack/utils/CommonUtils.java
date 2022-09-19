@@ -19,6 +19,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.format.ResolverStyle;
@@ -214,6 +215,23 @@ public class CommonUtils {
         headersMap.put("User", authHeader);
         return headersMap;
     }
+
+
+    public boolean checkAddOrWithoutAdd(String expiry_timr, String packageName, int credit_limit) {
+        return (
+                (System.currentTimeMillis() <= LocalDateTime.parse(expiry_timr)
+                        .atZone(ZoneId.systemDefault())
+                        .toInstant()
+                        .toEpochMilli() && Arrays.asList(PACKAGE_ARRAY_WITHOUT_ADD).contains(packageName))
+        );
+    }
+
+
+    public static final String[] PACKAGE_ARRAY_WITHOUT_ADD = {"com.withcodeplays.familytracker","com.withcodeplays.socialmediatracker"};
+    public static final String[] PACKAGE_ARRAY_WITH_ADD = {"com.withcodeplays.wetracker",
+            "com.withcodeplays.whattracker",
+            "com.withcodeplays.crushtracker",
+            "com.withcodeplays.onlinetracker"};
 
 
     public String getExpiryTime(String purchaseMode)

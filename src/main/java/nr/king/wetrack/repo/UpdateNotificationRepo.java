@@ -6,11 +6,9 @@ import nr.king.wetrack.http.*;
 import nr.king.wetrack.http.homeModel.GetPhoneHistoryMainArrayModel;
 import nr.king.wetrack.http.homeModel.HomeModel;
 import nr.king.wetrack.jdbc.JdbcTemplateProvider;
-import nr.king.wetrack.services.SchedularServices;
 import nr.king.wetrack.utils.CommonUtils;
 import nr.king.wetrack.utils.HttpUtils;
 import nr.king.wetrack.utils.ResponseUtils;
-import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,7 +89,6 @@ public class UpdateNotificationRepo {
 
     public void doPushNotifcation() {
         try {
-
             SqlRowSet sqlRowSet = jdbcTemplate.getTemplate().queryForRowSet(selectNumberWithToken);
             while (sqlRowSet.next()) {
                 HttpResponse httpResponse = httpUtils.doPostRequest(0,
@@ -107,7 +104,9 @@ public class UpdateNotificationRepo {
                                 ))
                 );
                 GetPhoneHistoryMainArrayModel getPageHistoryNumberModel = commonUtils.safeParseJSON(objectMapper, httpResponse.getResponse(), GetPhoneHistoryMainArrayModel.class);
-                if (getPageHistoryNumberModel != null && getPageHistoryNumberModel.getData() != null && "available".equalsIgnoreCase(getPageHistoryNumberModel.getData().get(0).status)) {
+                if (getPageHistoryNumberModel != null && getPageHistoryNumberModel.getData() != null &&
+                        !getPageHistoryNumberModel.getData().isEmpty()
+                        &&"available".equalsIgnoreCase(getPageHistoryNumberModel.getData().get(0).status)) {
 
                     if (sqlRowSet.getString("PREVIOUS_TIME").isEmpty() ||
                             !getPageHistoryNumberModel.getData().get(0).getTimeStamp().equals(sqlRowSet.getString("PREVIOUS_TIME"))) {
@@ -168,5 +167,35 @@ public class UpdateNotificationRepo {
                 userId,
                 phoneNumber
         );
+    }
+
+    public void removeDemoUserNotification() {
+        try {
+            SqlRowSet sqlRowSet = jdbcTemplate.getTemplate().queryForRowSet(REMOVE_DEMO_USER_NOTIFICATION,CONSTANT_PACKAGE);
+            while (sqlRowSet.next())
+            {
+                if (!commonUtils.checkAddOrWithoutAdd(sqlRowSet.getString("expiry_time"),CONSTANT_PACKAGE,40))
+                {
+                    SqlRowSet innerMobileRowSet = jdbcTemplate.getTemplate().queryForRowSet(GET_USER_CONTAIN_NUMBER,sqlRowSet.getString("user_id"));
+                    while (innerMobileRowSet.next())
+                    {
+                        int count = diableNotificationforUser(false,
+                                innerMobileRowSet.getString("user_id"),innerMobileRowSet.getString("number"));
+                        logger.info("Notification Disabled where user_id "+count +" user id is"+innerMobileRowSet.getString("user_id"));
+                    }
+
+                }
+            }
+
+        }
+        catch (Exception exception)
+        {
+            logger.error("Exception in remove notification "+exception.getMessage(),exception);
+        }
+    }
+
+    private int diableNotificationforUser(boolean isEnable, String user_id, String number) {
+        return  jdbcTemplate.getTemplate()
+                .update(UPDATE_NOTIFCATION_DIABLE_NOTFIY,isEnable,user_id,number);
     }
 }

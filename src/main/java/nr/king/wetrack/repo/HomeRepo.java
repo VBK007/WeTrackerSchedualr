@@ -102,9 +102,10 @@ public class HomeRepo {
     private int doUpdateUser(HomeModel homeModel) {
         return jdbcTemplateProvider.getTemplate()
                 .update("update WE_TRACK_USERS_NO_OF_LOGIN set USER_ID=?,MOBILE_MODEL=?,IP_ADDRESS=?,COUNTRY=?," +
-                                "ONE_SIGNAL_EXTERNAL_USERID=?,MOBILE_VERSION=?,UPDATED_AT = current_timestamp" +
+                                "ONE_SIGNAL_EXTERNAL_USERID=?,MOBILE_VERSION=?,UPDATED_AT = current_timestamp,purchase_mode=?,EXPIRY_TIME=?" +
                                 " where USER_ID=?", homeModel.getId(), homeModel.getPhoneModel(), homeModel.getIpAddress(),
-                        homeModel.getCountryName(), homeModel.getOneSignalExternalUserId(), homeModel.getAppId(),
+                        homeModel.getCountryName(), homeModel.getOneSignalExternalUserId(), homeModel.getAppId(),homeModel.getMobilePhone(),
+                        homeModel.getPhoneBrand(),
                         homeModel.getId()
                 );
     }
