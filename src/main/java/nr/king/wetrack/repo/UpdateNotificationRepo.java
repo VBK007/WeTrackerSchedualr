@@ -107,7 +107,7 @@ public class UpdateNotificationRepo {
                 if (getPageHistoryNumberModel != null && getPageHistoryNumberModel.getData() != null &&
                         !getPageHistoryNumberModel.getData().isEmpty()
                         &&"available".equalsIgnoreCase(getPageHistoryNumberModel.getData().get(0).status)) {
-
+                    logger.info("Response from server for user "+ sqlRowSet.getString("number")+commonUtils.writeAsString(objectMapper,getPageHistoryNumberModel.getData().get(0).status));
                     if (sqlRowSet.getString("PREVIOUS_TIME").isEmpty() ||
                             !getPageHistoryNumberModel.getData().get(0).getTimeStamp().equals(sqlRowSet.getString("PREVIOUS_TIME"))) {
                         logger.info("Response data  zero postion" + commonUtils.writeAsString(objectMapper, getPageHistoryNumberModel.getData().get(0)));
@@ -197,5 +197,21 @@ public class UpdateNotificationRepo {
     private int diableNotificationforUser(boolean isEnable, String user_id, String number) {
         return  jdbcTemplate.getTemplate()
                 .update(UPDATE_NOTIFCATION_DIABLE_NOTFIY,isEnable,user_id,number);
+    }
+
+    public ResponseEntity updateToken(NotificationModel notificationModel) {
+        try
+        {
+            int count = jdbcTemplate.getTemplate().update(UPDATE_TOKEN,notificationModel.getPushToken(),notificationModel.getUserId());
+            logger.info("Token updated Successfully");
+           return responseUtils.constructResponse(200,commonUtils.writeAsString(objectMapper,
+                   new ApiResponse(count==1,(count==200)?"Successfully updated Token":"Token Updated Failed")));
+
+        }
+        catch (Exception exception)
+        {
+            logger.error("Exception in update token "+exception.getMessage(),exception);
+            throw new FailedResponseException("Exception in update token"+exception.getMessage());
+        }
     }
 }

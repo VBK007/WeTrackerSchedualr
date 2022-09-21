@@ -50,4 +50,19 @@ public class UpdateNotificationServices {
         }
     }
 
+    public ResponseEntity updateToken(NotificationModel notificationModel)
+    {
+        try
+        {
+            return updateNotificationRepo.updateToken(notificationModel);
+
+        }
+        catch (Exception exception)
+        {
+            logger.error("Exception in update notification"+exception.getMessage(),exception);
+            return  responseUtils.constructResponse(406,
+                    commonUtils.writeAsString(objectMapper,new ApiResponse(false,"Unable to update notify")));
+        }
+    }
+
 }

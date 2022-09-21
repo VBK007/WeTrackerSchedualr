@@ -46,7 +46,7 @@ public class SchedularServices {
 
 
 
-    @Scheduled(cron = "00 00 * * *")
+    @Scheduled(cron = "0 00 00 * * *")
     public void removeDemoUserNotification() {
         try {
             updateNotificationRepo.removeDemoUserNotification();

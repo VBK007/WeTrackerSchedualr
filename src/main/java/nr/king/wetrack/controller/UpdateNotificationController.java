@@ -19,4 +19,12 @@ public class UpdateNotificationController extends BaseController {
     {
         return updateNotificationServices.updateNotifcationService(notificationModel);
     }
+
+    @PostMapping("/v{version:[1]}/update-token")
+    public ResponseEntity updateToken(@RequestBody NotificationModel notificationModel)
+    {
+        return updateNotificationServices.updateToken(notificationModel);
+    }
+
+
 }

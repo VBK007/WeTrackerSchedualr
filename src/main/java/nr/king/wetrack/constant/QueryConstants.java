@@ -54,12 +54,15 @@ public class QueryConstants {
 
 
     public static final String REMOVE_DEMO_USER_NOTIFICATION
-            ="SELECT user_id,package_name,purchase_mode,expiry_time from we_track_users_no_of_login where package_name=? and purchase_mode!='demo'";
+            ="SELECT user_id,package_name,purchase_mode,expiry_time from we_track_users_no_of_login where package_name=? and purchase_mode='demo'";
 
 
     public static final String GET_USER_CONTAIN_NUMBER ="select USER_ID,NUMBER from NUMBER_FOR_USERS where USER_ID=?";
     public static final String UPDATE_NOTIFCATION_DIABLE_NOTFIY ="update update_notifcation_number set ENABLE_NOTIFY=? where USER_ID=? and NUMBER=?";
 
     public static final String CONSTANT_PACKAGE="com.withcodeplays.familytracker";
+
+    public static final String UPDATE_TOKEN ="update update_notifcation_number set token=? where USER_ID=?";
+
 
 }
