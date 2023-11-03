@@ -38,7 +38,7 @@ public class SchedularServices {
     @Scheduled(initialDelay = 0, fixedDelay = 10000)
     public void demoServiceMethod() {
         try {
-            updateNotificationRepo.doPushNotifcation();
+             updateNotificationRepo.doPushNotifcation();
         } catch (Exception exception) {
             logger.error("Exception in schedualr " + exception.getMessage(), exception);
         }
