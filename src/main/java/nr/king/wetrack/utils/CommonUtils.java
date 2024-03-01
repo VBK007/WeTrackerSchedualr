@@ -204,7 +204,8 @@ public class CommonUtils {
     public Map<String, String> getHeadersMap() {
         Map<String, String> headersMap = new LinkedHashMap<>();
         headersMap.put("Content-Type", "application/json");
-        headersMap.put("Authorization","key=AAAALNZGB-o:APA91bFmdGOcQfkho_jJwkyVoUwU35kOzuh202WcFT63KR_m_oMY8DaBRZ4aNQZN0KTR0tCm8YXQU2lHQtKW1I6uthOabc5g_03eaAub0cIWyTZ1jNWpLk9K-IXUdvXy1xWF0B_CEoqQ");
+        headersMap.put("Authorization",
+                "key=AAAALNZGB-o:APA91bFmdGOcQfkho_jJwkyVoUwU35kOzuh202WcFT63KR_m_oMY8DaBRZ4aNQZN0KTR0tCm8YXQU2lHQtKW1I6uthOabc5g_03eaAub0cIWyTZ1jNWpLk9K-IXUdvXy1xWF0B_CEoqQ");
         return headersMap;
     }
 
